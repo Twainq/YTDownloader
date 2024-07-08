@@ -120,7 +120,7 @@
             this.btnStart.FillColor = System.Drawing.Color.Firebrick;
             this.btnStart.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.btnStart.ForeColor = System.Drawing.Color.White;
-            this.btnStart.Location = new System.Drawing.Point(646, 59);
+            this.btnStart.Location = new System.Drawing.Point(638, 59);
             this.btnStart.Name = "btnStart";
             this.btnStart.Size = new System.Drawing.Size(115, 45);
             this.btnStart.TabIndex = 1;
