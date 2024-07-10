@@ -4,10 +4,12 @@ using System.ComponentModel;
 using System.Data;
 using System.Data.SqlTypes;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using VideoLibrary;
 using YoutubeExtractor;
 
 namespace YTDownloader
@@ -30,23 +32,33 @@ namespace YTDownloader
         }
         void Download()
         {
-            string link = "https://www.youtube.com/watch?v=BF0uf7apZDQ";
-            IEnumerable<VideoInfo> videos = DownloadUrlResolver.GetDownloadUrls(link);
-            VideoInfo vi = videos.First(info => info.VideoType == VideoType.Mp4 && info.Resolution == Convert.ToInt32(360));
-            if (vi.RequiresDecryption)
+            try
             {
-                DownloadUrlResolver.DecryptDownloadUrl(vi);
-
+                var youTube = YouTube.Default;
+                var video = youTube.GetVideo(txtUrl.Text);
+                File.WriteAllBytes(@"" + txtPath.Text + video.FullName, video.GetBytes());
+                Check(@"" + txtPath.Text + video.FullName);
+            }catch (Exception ex)
+            {
+                MessageBox.Show("Ops! Error... Enter a correct url");
             }
-
-            var videoDownload = new VideoDownloader(vi, "D:\\" + vi.Title + vi.VideoExtension);
-            videoDownload.DownloadFinished += videoDownload_DownloadFinished;
-            videoDownload.Execute();
         }
 
-        void videoDownload_DownloadFinished(object s, EventArgs e)
+        void Check(string txtUrl)
         {
-            MessageBox.Show("Download been finished");
+            if (File.Exists(txtUrl))
+            {
+                MessageBox.Show("Download been finished");
+            }
         }
+
+        private void btnPath_Click(object sender, EventArgs e)
+        {
+            if (folderBrowserDialog1.ShowDialog() == DialogResult.OK)
+            {
+                txtPath.Text = folderBrowserDialog1.SelectedPath;
+            }
+        }
+
     }
 }
